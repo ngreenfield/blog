@@ -24,7 +24,7 @@ class PostDeleteView(DeleteView):
 class PostCreateView(CreateView):
     template_name = "posts/create.html"
     model = Post
-    fields = ["title", "subtitle", "body", "status", "Author"]
+    fields = ["title", "subtitle", "body", "status", "author"]
 
 class PostListView(ListView):
     template_name = "posts/list.html"
