@@ -19,6 +19,7 @@ class PostListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         published = Status.objects.get(name="published")
+        context["title"] = "Published"
         context["post_list"] = (
             Post.objects
             .filter(status=published)
@@ -33,6 +34,7 @@ class DraftPostListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         draft = Status.objects.get(name="draft")
+        context["title"] = "Draft"
         context["post_list"] = (
             Post.objects
             .filter(status=draft, author=self.request.user)
@@ -47,6 +49,7 @@ class ArchivedPostListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         archived = Status.objects.get(name="archived")
+        context["title"] = "Archived"
         context["post_list"] = (
             Post.objects
             .filter(status=archived)
@@ -87,3 +90,14 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 class PostDetailView(DetailView):
     template_name = "posts/detail.html"
     model = Post
+
+    def test_func(self):
+        post = self.get.object()
+        if post.status.name == "published":
+            return True
+        elif post.status.name == "draft" and post.author == self.request.user:
+            return True
+        elif post.status.name == "archived" and self.request.user.is_authenicatated:
+            return True
+        else:
+            return False
