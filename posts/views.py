@@ -42,7 +42,7 @@ class DraftPostListView(LoginRequiredMixin, ListView):
         )
         return context
     
-class ArchivedPostListView(LoginRequiredMixin, ListView):
+class ArchivedPostListView(ListView):
     template_name = "posts/list.html"
     model = Post
 
